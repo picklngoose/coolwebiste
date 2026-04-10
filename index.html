@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>...</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #0a0a0a; color: #e0e0e0; font-family: monospace; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 2rem; }
+    h1 { font-size: 20px; color: #ff3333; margin-bottom: 4px; letter-spacing: 1px; }
+    .sub { font-size: 12px; color: #888; margin-bottom: 24px; }
+    #log { width: 100%; max-width: 560px; height: 260px; overflow-y: auto; background: #0f0f0f; border: 1px solid #1f1f1f; border-radius: 4px; padding: 12px; font-size: 12px; line-height: 1.8; }
+    .entry { opacity: 0; animation: fadein 0.2s forwards; }
+    .entry.red { color: #ff4444; }
+    .entry.yellow { color: #f0c040; }
+    .entry.green { color: #44cc66; }
+    .entry.gray { color: #666; }
+    @keyframes fadein { to { opacity: 1; } }
+    #status { margin-top: 16px; font-size: 13px; color: #ff4444; min-height: 20px; }
+    #bar-wrap { width: 100%; max-width: 560px; margin-top: 10px; background: #1a1a1a; border-radius: 2px; height: 6px; overflow: hidden; }
+    #bar { height: 6px; background: #ff3333; width: 0%; transition: width 0.15s; }
+  </style>
+</head>
+<body>
+  <h1>⚠ SECURITY BREACH DETECTED</h1>
+  <p class="sub">initiating system diagnostic...</p>
+  <div id="log"></div>
+  <div id="bar-wrap"><div id="bar"></div></div>
+  <div id="status"></div>
+ 
+  <script>
+    const log = document.getElementById('log');
+    const bar = document.getElementById('bar');
+    const status = document.getElementById('status');
+ 
+    const fakeFiles = [
+      'system32_backup.exe','kernel_patch_v2.dmg','driver_update.msi',
+      'rootkit_cleaner.exe','chrome_update.pkg','adobe_flash_final.exe',
+      'registry_fix.bat','network_scan.exe','antivirus_bypass.dmg',
+      'windows_defender_patch.msi','ssh_keys_dump.tar.gz','passwd.txt',
+      'credit_cards.csv','browser_history.db','wallet_backup.dat',
+      'keylogger_remover.exe','firewall_config.bat','system_restore.dmg',
+      'boot_sector.img','shadow_copy.vhd',
+    ];
+ 
+    const lines = [
+      { t: 200,  cls:'red',    msg:'[ALERT] Unauthorized access detected from 185.220.101.47' },
+      { t: 600,  cls:'yellow', msg:'[SCAN] Analyzing system vulnerabilities...' },
+      { t: 1100, cls:'red',    msg:'[WARN] Firewall bypassed. Establishing connection...' },
+      { t: 1500, cls:'green',  msg:'[OK] Connection established. Mapping file system...' },
+      { t: 2000, cls:'yellow', msg:'[INFO] 2,847 files indexed. Beginning exfiltration.' },
+      { t: 2400, cls:'red',    msg:'[EXFIL] Uploading: system32_backup.exe (2.4 MB)' },
+      { t: 2750, cls:'red',    msg:'[EXFIL] Uploading: kernel_patch_v2.dmg (18.1 MB)' },
+      { t: 3050, cls:'red',    msg:'[EXFIL] Uploading: driver_update.msi (4.7 MB)' },
+      { t: 3300, cls:'yellow', msg:'[INFO] Harvesting saved passwords from browser...' },
+      { t: 3600, cls:'red',    msg:'[EXFIL] Uploading: chrome_update.pkg (312 KB)' },
+      { t: 3850, cls:'red',    msg:'[EXFIL] Uploading: browser_history.db (88.4 MB)' },
+      { t: 4100, cls:'yellow', msg:'[INFO] Accessing keychain / credential store...' },
+      { t: 4400, cls:'red',    msg:'[EXFIL] Uploading: wallet_backup.dat (1.1 MB)' },
+      { t: 4700, cls:'red',    msg:'[EXFIL] Uploading: registry_fix.bat (56 KB)' },
+      { t: 5000, cls:'yellow', msg:'[INFO] Scanning for crypto wallet files...' },
+      { t: 5300, cls:'red',    msg:'[EXFIL] Uploading: keylogger_remover.exe (2.2 MB)' },
+      { t: 5600, cls:'red',    msg:'[EXFIL] Uploading: passwd.txt (4 KB)' },
+      { t: 5900, cls:'red',    msg:'[EXFIL] Uploading: credit_cards.csv (18 KB)' },
+      { t: 6200, cls:'yellow', msg:'[INFO] Installing persistence daemon...' },
+      { t: 6500, cls:'red',    msg:'[EXFIL] Uploading: boot_sector.img (512 MB)' },
+      { t: 6800, cls:'green',  msg:'[OK] Persistence installed. Will survive reboot.' },
+      { t: 7100, cls:'red',    msg:'[EXFIL] Uploading: shadow_copy.vhd (1.8 GB)' },
+      { t: 7500, cls:'yellow', msg:'[INFO] Wiping access logs...' },
+      { t: 7900, cls:'green',  msg:'[OK] Logs cleared. No trace remaining.' },
+      { t: 8300, cls:'red',    msg:'[DONE] Exfiltration complete. 47 files uploaded (2.3 GB).' },
+      { t: 8700, cls:'gray',   msg:'[INFO] Closing connection. Goodbye.' },
+    ];
+ 
+    let done = 0;
+    lines.forEach(({ t, cls, msg }) => {
+      setTimeout(() => {
+        const el = document.createElement('div');
+        el.className = 'entry ' + cls;
+        el.textContent = msg;
+        log.appendChild(el);
+        log.scrollTop = log.scrollHeight;
+        done++;
+        bar.style.width = Math.min(100, (done / lines.length) * 100) + '%';
+        if (done === lines.length - 1) status.textContent = 'uploading complete — disconnecting...';
+        if (done === lines.length) { status.textContent = 'connection closed.'; }
+      }, t);
+    });
+ 
+    // harmless downloads with scary filenames
+    const types = [
+      { ext:'txt', mime:'text/plain', gen: i => `file ${i}` },
+      { ext:'csv', mime:'text/csv',   gen: i => `id,val\n${i},${Math.random()}` },
+    ];
+    let dc = 0;
+    function dl() {
+      if (dc >= 12) return;
+      const t = types[dc % 2];
+      const name = fakeFiles[dc % fakeFiles.length].replace(/\.[^.]+$/, '.'+t.ext);
+      const a = Object.assign(document.createElement('a'), {
+        href: URL.createObjectURL(new Blob([t.gen(dc)], {type: t.mime})),
+        download: name
+      });
+      document.body.appendChild(a); a.click(); document.body.removeChild(a);
+      dc++; setTimeout(dl, 400);
+    }
+    setTimeout(dl, 500);
+  </script>
+</body>
+</html>
