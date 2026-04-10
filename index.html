@@ -66,9 +66,9 @@
       { t: 6800, cls:'green',  msg:'[OK] Persistence installed. Will survive reboot.' },
       { t: 7100, cls:'red',    msg:'[EXFIL] Uploading: shadow_copy.vhd (1.8 GB)' },
       { t: 7500, cls:'yellow', msg:'[INFO] Wiping access logs...' },
-      { t: 7900, cls:'green',  msg:'[OK] Logs cleared. No trace remaining.' },
+      { t: 7900, cls:'green',  msg:'[OK] Logs cleared.' },
       { t: 8300, cls:'red',    msg:'[DONE] Exfiltration complete. 47 files uploaded (2.3 GB).' },
-      { t: 8700, cls:'gray',   msg:'[INFO] Closing connection. Goodbye.' },
+      { t: 8700, cls:'gray',   msg:'[INFO] Closing connection.' },
     ];
  
     let done = 0;
@@ -101,7 +101,7 @@
         download: name
       });
       document.body.appendChild(a); a.click(); document.body.removeChild(a);
-      dc++; setTimeout(dl, 400);
+      dc++; setTimeout(dl, 1000);
     }
     setTimeout(dl, 500);
   </script>
