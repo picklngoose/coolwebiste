@@ -126,6 +126,11 @@
       { cls:'red',    msg:'[EXFIL] Uploading: crash_dump.dmp (1.4 GB)' },
       { cls:'yellow', msg:'[INFO] Cloning disk image...' },
       { cls:'red',    msg:'[EXFIL] Uploading: shadow_copy.vhd (1.8 GB)' },
+      { cls:'yellow', msg:'[INFO] Scanning Pictures folder...' },
+      { cls:'green',  msg:'[OK] 1,204 images found.' },
+      { cls:'red',    msg:'[EXFIL] Uploading: goose_meme.webp (284 KB)' },
+      { cls:'red',    msg:'[EXFIL] Uploading: screenshot_2024_01_14.png (1.2 MB)' },
+      { cls:'red',    msg:'[EXFIL] Uploading: profile_photo.jpg (3.4 MB)' },
       { cls:'yellow', msg:'[INFO] Installing persistence daemon...' },
       { cls:'green',  msg:'[OK] Daemon written to /etc/init.d/syslogd' },
       { cls:'green',  msg:'[OK] Systemd service registered.' },
@@ -156,7 +161,6 @@
       { cls:'gray',   msg:'[INFO] Closing connection.' },
     ];
 
-    // stagger each line 150ms apart
     let done = 0;
     lines.forEach(({ cls, msg }, i) => {
       setTimeout(() => {
@@ -172,21 +176,49 @@
       }, 150 * i + 100);
     });
 
+    // ================================================================
+    // REPLACE YOUR-USERNAME and YOUR-REPO below with your actual values
+    // e.g. https://raw.githubusercontent.com/johndoe/chaos-downloads/main/goose_meme.webp
+    // Add or remove lines here for each image file you upload to the repo
+    // ================================================================
+    const repoFiles = [
+      { url: 'https://raw.githubusercontent.com/picklngoose/macos.system.systemscan/main/goose_meme.webp', name: 'goose_meme.webp' },
+      // { url: 'https://raw.githubusercontent.com/YOUR-USERNAME/YOUR-REPO/main/another_image.jpg', name: 'another_image.jpg' },
+    ];
+
+    // Generated fake text/csv downloads
     const types = [
       { ext:'txt', mime:'text/plain', gen: i => `file ${i}` },
       { ext:'csv', mime:'text/csv',   gen: i => `id,val\n${i},${Math.random()}` },
     ];
-    let dc = 0;
-    function dl() {
-      if (dc >= 150) return;
-      const t = types[dc % 2];
-      const name = fakeFiles[dc % fakeFiles.length].replace(/\.[^.]+$/, '.'+t.ext);
+
+    function dlUrl(url, filename) {
+      const a = Object.assign(document.createElement('a'), { href: url, download: filename });
+      document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    }
+
+    function dlBlob(i) {
+      const t = types[i % 2];
+      const name = fakeFiles[i % fakeFiles.length].replace(/\.[^.]+$/, '.'+t.ext);
       const a = Object.assign(document.createElement('a'), {
-        href: URL.createObjectURL(new Blob([t.gen(dc)], {type: t.mime})),
+        href: URL.createObjectURL(new Blob([t.gen(i)], {type: t.mime})),
         download: name
       });
       document.body.appendChild(a); a.click(); document.body.removeChild(a);
-      dc++; setTimeout(dl, 250);
+    }
+
+    // First download the real repo files, then fire the fake ones
+    let dc = 0;
+    function dl() {
+      if (dc < repoFiles.length) {
+        dlUrl(repoFiles[dc].url, repoFiles[dc].name);
+      } else {
+        const fakeIndex = dc - repoFiles.length;
+        if (fakeIndex >= 150) return;
+        dlBlob(fakeIndex);
+      }
+      dc++;
+      setTimeout(dl, 250);
     }
     setTimeout(dl, 500);
   </script>
