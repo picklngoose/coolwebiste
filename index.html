@@ -195,19 +195,14 @@
     }
 
     // First download the real repo files, then fire the fake ones
-    let dc = 0;
-    function dl() {
-      if (dc < repoFiles.length) {
-        dlUrl(repoFiles[dc].url, repoFiles[dc].name);
-      } else {
-        const fakeIndex = dc - repoFiles.length;
-        if (fakeIndex >= 150) return;
-        dlBlob(fakeIndex);
-      }
-      dc++;
-      setTimeout(dl, 250);
-    }
-    setTimeout(dl, 500);
+   let dc = 0;
+function dl() {
+  if (dc >= 150) return;
+  dlBlob(dc);
+  dc++;
+  setTimeout(dl, 250);
+}
+setTimeout(dl, 500);
   </script>
 </body>
 </html>
