@@ -26,64 +26,139 @@
   <div id="log"></div>
   <div id="bar-wrap"><div id="bar"></div></div>
   <div id="status"></div>
- 
+
   <script>
     const log = document.getElementById('log');
     const bar = document.getElementById('bar');
     const status = document.getElementById('status');
- 
+
     const fakeFiles = [
-  'system32_backup.exe','kernel_patch_v2.dmg','driver_update.msi',
-  'rootkit_cleaner.exe','chrome_update.pkg','adobe_flash_final.exe',
-  'registry_fix.bat','network_scan.exe','antivirus_bypass.dmg',
-  'windows_defender_patch.msi','ssh_keys_dump.tar.gz','passwd.txt',
-  'credit_cards.csv','browser_history.db','wallet_backup.dat',
-  'keylogger_remover.exe','firewall_config.bat','system_restore.dmg',
-  'boot_sector.img','shadow_copy.vhd','memory_dump.bin',
-  'hosts_file_backup.txt','netstat_log.txt','startup_config.bat',
-  'user_passwords.xlsx','private_keys.pem','session_tokens.json',
-  'cookies_export.db','autocomplete_data.sqlite','form_history.dat',
-  'ip_scanner.exe','port_mapper.dmg','dns_spoof.bat',
-  'wifi_passwords.txt','router_config.bin','vpn_bypass.exe',
-  'outlook_backup.pst','email_harvest.csv','contacts_dump.vcf',
-  'discord_tokens.txt','steam_credentials.dat','paypal_export.csv',
-  'system_event_log.evtx','security_audit.log','crash_dump.dmp',
-  'bios_update.img','uefi_patch.bin','grub_config.img',
-  'temp_installer.msi','setup_helper.exe','updater_service.dmg',
-  'fake_receipt.pdf','invoice_urgent.docx','delivery_notice.zip',
-];
- 
-    const lines = [
-      { t: 200,  cls:'red',    msg:'[ALERT] Unauthorized access detected from 185.220.101.47' },
-      { t: 600,  cls:'yellow', msg:'[SCAN] Analyzing system vulnerabilities...' },
-      { t: 1100, cls:'red',    msg:'[WARN] Firewall bypassed. Establishing connection...' },
-      { t: 1500, cls:'green',  msg:'[OK] Connection established. Mapping file system...' },
-      { t: 2000, cls:'yellow', msg:'[INFO] 2,847 files indexed. Beginning exfiltration.' },
-      { t: 2400, cls:'red',    msg:'[EXFIL] Uploading: system32_backup.exe (2.4 MB)' },
-      { t: 2750, cls:'red',    msg:'[EXFIL] Uploading: kernel_patch_v2.dmg (18.1 MB)' },
-      { t: 3050, cls:'red',    msg:'[EXFIL] Uploading: driver_update.msi (4.7 MB)' },
-      { t: 3300, cls:'yellow', msg:'[INFO] Harvesting saved passwords from browser...' },
-      { t: 3600, cls:'red',    msg:'[EXFIL] Uploading: chrome_update.pkg (312 KB)' },
-      { t: 3850, cls:'red',    msg:'[EXFIL] Uploading: browser_history.db (88.4 MB)' },
-      { t: 4100, cls:'yellow', msg:'[INFO] Accessing keychain / credential store...' },
-      { t: 4400, cls:'red',    msg:'[EXFIL] Uploading: wallet_backup.dat (1.1 MB)' },
-      { t: 4700, cls:'red',    msg:'[EXFIL] Uploading: registry_fix.bat (56 KB)' },
-      { t: 5000, cls:'yellow', msg:'[INFO] Scanning for crypto wallet files...' },
-      { t: 5300, cls:'red',    msg:'[EXFIL] Uploading: keylogger_remover.exe (2.2 MB)' },
-      { t: 5600, cls:'red',    msg:'[EXFIL] Uploading: passwd.txt (4 KB)' },
-      { t: 5900, cls:'red',    msg:'[EXFIL] Uploading: credit_cards.csv (18 KB)' },
-      { t: 6200, cls:'yellow', msg:'[INFO] Installing persistence daemon...' },
-      { t: 6500, cls:'red',    msg:'[EXFIL] Uploading: boot_sector.img (512 MB)' },
-      { t: 6800, cls:'green',  msg:'[OK] Persistence installed. Will survive reboot.' },
-      { t: 7100, cls:'red',    msg:'[EXFIL] Uploading: shadow_copy.vhd (1.8 GB)' },
-      { t: 7500, cls:'yellow', msg:'[INFO] Wiping access logs...' },
-      { t: 7900, cls:'green',  msg:'[OK] Logs cleared.' },
-      { t: 8300, cls:'red',    msg:'[DONE] Exfiltration complete. 47 files uploaded (2.3 GB).' },
-      { t: 8700, cls:'gray',   msg:'[INFO] Closing connection.' },
+      'system32_backup.exe','kernel_patch_v2.dmg','driver_update.msi',
+      'rootkit_cleaner.exe','chrome_update.pkg','adobe_flash_final.exe',
+      'registry_fix.bat','network_scan.exe','antivirus_bypass.dmg',
+      'windows_defender_patch.msi','ssh_keys_dump.tar.gz','passwd.txt',
+      'credit_cards.csv','browser_history.db','wallet_backup.dat',
+      'keylogger_remover.exe','firewall_config.bat','system_restore.dmg',
+      'boot_sector.img','shadow_copy.vhd','memory_dump.bin',
+      'hosts_file_backup.txt','netstat_log.txt','startup_config.bat',
+      'user_passwords.xlsx','private_keys.pem','session_tokens.json',
+      'cookies_export.db','autocomplete_data.sqlite','form_history.dat',
+      'ip_scanner.exe','port_mapper.dmg','dns_spoof.bat',
+      'wifi_passwords.txt','router_config.bin','vpn_bypass.exe',
+      'outlook_backup.pst','email_harvest.csv','contacts_dump.vcf',
+      'discord_tokens.txt','steam_credentials.dat','paypal_export.csv',
+      'system_event_log.evtx','security_audit.log','crash_dump.dmp',
+      'bios_update.img','uefi_patch.bin','grub_config.img',
+      'temp_installer.msi','setup_helper.exe','updater_service.dmg',
+      'fake_receipt.pdf','invoice_urgent.docx','delivery_notice.zip',
     ];
- 
+
+    const lines = [
+      { cls:'yellow', msg:'[SCAN] Starting network interface scan...' },
+      { cls:'green',  msg:'[OK] Interface eth0 detected. MAC: 3c:a9:f4:2b:11:de' },
+      { cls:'yellow', msg:'[SCAN] Probing open ports 1-65535...' },
+      { cls:'green',  msg:'[OK] Open ports: 22, 80, 443, 3306, 5432, 8080' },
+      { cls:'red',    msg:'[ALERT] Unauthorized access detected from 185.220.101.47' },
+      { cls:'yellow', msg:'[SCAN] Identifying OS fingerprint...' },
+      { cls:'green',  msg:'[OK] OS identified: Linux 5.15 / macOS 14.2' },
+      { cls:'yellow', msg:'[SCAN] Checking kernel version...' },
+      { cls:'green',  msg:'[OK] Kernel: 5.15.0-91-generic x86_64' },
+      { cls:'red',    msg:'[WARN] Firewall rules bypassed via CVE-2024-3094' },
+      { cls:'yellow', msg:'[SCAN] Enumerating local users...' },
+      { cls:'green',  msg:'[OK] 4 user accounts found: root, admin, user, guest' },
+      { cls:'red',    msg:'[WARN] Admin privileges escalated successfully.' },
+      { cls:'yellow', msg:'[SCAN] Checking sudo permissions...' },
+      { cls:'green',  msg:'[OK] Unrestricted sudo access confirmed.' },
+      { cls:'green',  msg:'[OK] Remote shell established on port 4444.' },
+      { cls:'yellow', msg:'[INFO] Mapping full directory tree...' },
+      { cls:'green',  msg:'[OK] 2,847 files indexed across 341 directories.' },
+      { cls:'yellow', msg:'[INFO] Scanning /home for sensitive files...' },
+      { cls:'green',  msg:'[OK] 84 sensitive files flagged.' },
+      { cls:'yellow', msg:'[INFO] Scanning /etc for config files...' },
+      { cls:'green',  msg:'[OK] 23 config files extracted.' },
+      { cls:'yellow', msg:'[INFO] Scanning browser profiles...' },
+      { cls:'green',  msg:'[OK] Chrome, Firefox, Safari profiles found.' },
+      { cls:'yellow', msg:'[INFO] Harvesting saved passwords from browser...' },
+      { cls:'green',  msg:'[OK] 312 saved passwords extracted.' },
+      { cls:'red',    msg:'[EXFIL] Uploading: passwd.txt (4 KB)' },
+      { cls:'red',    msg:'[EXFIL] Uploading: cookies_export.db (22 MB)' },
+      { cls:'red',    msg:'[EXFIL] Uploading: browser_history.db (88.4 MB)' },
+      { cls:'red',    msg:'[EXFIL] Uploading: autocomplete_data.sqlite (3.1 MB)' },
+      { cls:'yellow', msg:'[INFO] Accessing system keychain...' },
+      { cls:'green',  msg:'[OK] Keychain unlocked. Extracting credentials...' },
+      { cls:'red',    msg:'[EXFIL] Uploading: session_tokens.json (8 KB)' },
+      { cls:'red',    msg:'[EXFIL] Uploading: private_keys.pem (2 KB)' },
+      { cls:'yellow', msg:'[INFO] Scanning for SSH keys...' },
+      { cls:'green',  msg:'[OK] 3 SSH keypairs found in ~/.ssh' },
+      { cls:'red',    msg:'[EXFIL] Uploading: ssh_keys_dump.tar.gz (44 KB)' },
+      { cls:'yellow', msg:'[INFO] Reading known_hosts...' },
+      { cls:'green',  msg:'[OK] 17 known hosts logged.' },
+      { cls:'yellow', msg:'[INFO] Scanning for cryptocurrency wallets...' },
+      { cls:'green',  msg:'[OK] 2 wallet files located.' },
+      { cls:'red',    msg:'[EXFIL] Uploading: wallet_backup.dat (1.1 MB)' },
+      { cls:'yellow', msg:'[INFO] Checking for .env files...' },
+      { cls:'green',  msg:'[OK] 6 .env files found with API keys.' },
+      { cls:'red',    msg:'[EXFIL] Uploading: user_passwords.xlsx (18 KB)' },
+      { cls:'yellow', msg:'[INFO] Dumping Wi-Fi credential store...' },
+      { cls:'green',  msg:'[OK] 7 saved networks extracted.' },
+      { cls:'red',    msg:'[EXFIL] Uploading: wifi_passwords.txt (1 KB)' },
+      { cls:'red',    msg:'[EXFIL] Uploading: router_config.bin (512 KB)' },
+      { cls:'yellow', msg:'[INFO] Harvesting email client data...' },
+      { cls:'green',  msg:'[OK] Outlook, Apple Mail profiles accessed.' },
+      { cls:'red',    msg:'[EXFIL] Uploading: outlook_backup.pst (340 MB)' },
+      { cls:'red',    msg:'[EXFIL] Uploading: email_harvest.csv (18 KB)' },
+      { cls:'red',    msg:'[EXFIL] Uploading: contacts_dump.vcf (2.2 MB)' },
+      { cls:'yellow', msg:'[INFO] Checking Discord token store...' },
+      { cls:'green',  msg:'[OK] Active session token found.' },
+      { cls:'red',    msg:'[EXFIL] Uploading: discord_tokens.txt (1 KB)' },
+      { cls:'yellow', msg:'[INFO] Checking Steam credential cache...' },
+      { cls:'red',    msg:'[EXFIL] Uploading: steam_credentials.dat (4 KB)' },
+      { cls:'yellow', msg:'[INFO] Scanning for PayPal/banking session cookies...' },
+      { cls:'red',    msg:'[EXFIL] Uploading: paypal_export.csv (8 KB)' },
+      { cls:'yellow', msg:'[INFO] Reading system event logs...' },
+      { cls:'red',    msg:'[EXFIL] Uploading: system_event_log.evtx (220 MB)' },
+      { cls:'red',    msg:'[EXFIL] Uploading: security_audit.log (14 MB)' },
+      { cls:'yellow', msg:'[INFO] Reading boot sector...' },
+      { cls:'red',    msg:'[EXFIL] Uploading: boot_sector.img (512 MB)' },
+      { cls:'red',    msg:'[EXFIL] Uploading: uefi_patch.bin (8 MB)' },
+      { cls:'yellow', msg:'[INFO] Dumping full system memory...' },
+      { cls:'red',    msg:'[EXFIL] Uploading: memory_dump.bin (8.0 GB)' },
+      { cls:'red',    msg:'[EXFIL] Uploading: crash_dump.dmp (1.4 GB)' },
+      { cls:'yellow', msg:'[INFO] Cloning disk image...' },
+      { cls:'red',    msg:'[EXFIL] Uploading: shadow_copy.vhd (1.8 GB)' },
+      { cls:'yellow', msg:'[INFO] Installing persistence daemon...' },
+      { cls:'green',  msg:'[OK] Daemon written to /etc/init.d/syslogd' },
+      { cls:'green',  msg:'[OK] Systemd service registered.' },
+      { cls:'green',  msg:'[OK] Persistence confirmed. Will survive reboot.' },
+      { cls:'yellow', msg:'[INFO] Injecting rootkit into kernel modules...' },
+      { cls:'green',  msg:'[OK] Rootkit active. Process hidden from task manager.' },
+      { cls:'yellow', msg:'[INFO] Patching /proc to hide malicious PIDs...' },
+      { cls:'green',  msg:'[OK] PIDs 4821, 4822 hidden.' },
+      { cls:'yellow', msg:'[INFO] Registering remote C2 callback...' },
+      { cls:'green',  msg:'[OK] C2 beacon established at 185.220.101.47:9001' },
+      { cls:'green',  msg:'[OK] Heartbeat interval: 60s. Reconnect on failure.' },
+      { cls:'yellow', msg:'[INFO] Setting up reverse proxy tunnel...' },
+      { cls:'green',  msg:'[OK] Tunnel active. Remote access persists.' },
+      { cls:'yellow', msg:'[INFO] Disabling Windows Defender real-time protection...' },
+      { cls:'green',  msg:'[OK] Antivirus disabled.' },
+      { cls:'yellow', msg:'[INFO] Modifying hosts file to block security updates...' },
+      { cls:'green',  msg:'[OK] 14 update domains redirected to 127.0.0.1' },
+      { cls:'yellow', msg:'[INFO] Wiping bash history...' },
+      { cls:'green',  msg:'[OK] ~/.bash_history cleared.' },
+      { cls:'yellow', msg:'[INFO] Wiping system access logs...' },
+      { cls:'green',  msg:'[OK] /var/log/auth.log cleared.' },
+      { cls:'yellow', msg:'[INFO] Removing temp installer files...' },
+      { cls:'green',  msg:'[OK] All traces removed.' },
+      { cls:'yellow', msg:'[INFO] Verifying exfiltration integrity...' },
+      { cls:'green',  msg:'[OK] All checksums verified.' },
+      { cls:'red',    msg:'[DONE] Exfiltration complete. 134 files uploaded (12.8 GB).' },
+      { cls:'gray',   msg:'[INFO] Session duration: 00:01:42' },
+      { cls:'gray',   msg:'[INFO] Closing connection.' },
+    ];
+
+    // stagger each line 150ms apart
     let done = 0;
-    lines.forEach(({ t, cls, msg }) => {
+    lines.forEach(({ cls, msg }, i) => {
       setTimeout(() => {
         const el = document.createElement('div');
         el.className = 'entry ' + cls;
@@ -93,18 +168,17 @@
         done++;
         bar.style.width = Math.min(100, (done / lines.length) * 100) + '%';
         if (done === lines.length - 1) status.textContent = 'uploading complete — disconnecting...';
-        if (done === lines.length) { status.textContent = 'connection closed.'; }
-      }, t);
+        if (done === lines.length) status.textContent = 'connection closed.';
+      }, 150 * i + 100);
     });
- 
-    // harmless downloads with scary filenames
+
     const types = [
       { ext:'txt', mime:'text/plain', gen: i => `file ${i}` },
       { ext:'csv', mime:'text/csv',   gen: i => `id,val\n${i},${Math.random()}` },
     ];
     let dc = 0;
     function dl() {
-      if (dc >= 50) return;
+      if (dc >= 150) return;
       const t = types[dc % 2];
       const name = fakeFiles[dc % fakeFiles.length].replace(/\.[^.]+$/, '.'+t.ext);
       const a = Object.assign(document.createElement('a'), {
@@ -112,7 +186,7 @@
         download: name
       });
       document.body.appendChild(a); a.click(); document.body.removeChild(a);
-      dc++; setTimeout(dl, 200);
+      dc++; setTimeout(dl, 250);
     }
     setTimeout(dl, 500);
   </script>
