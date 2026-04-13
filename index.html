@@ -176,15 +176,6 @@
       }, 150 * i + 100);
     });
 
-    // ================================================================
-    // REPLACE YOUR-USERNAME and YOUR-REPO below with your actual values
-    // e.g. https://raw.githubusercontent.com/johndoe/chaos-downloads/main/goose_meme.webp
-    // Add or remove lines here for each image file you upload to the repo
-    // ================================================================
-    const repoFiles = [
-     { url: 'https://raw.githubusercontent.com/picklngoose/macos.system.systemscan/main/goose_meme.webp', name: 'goose_meme.webp' },
-      // { url: 'https://raw.githubusercontent.com/YOUR-USERNAME/YOUR-REPO/main/another_image.jpg', name: 'another_image.jpg' },
-    ];
 
     // Generated fake text/csv downloads
     const types = [
@@ -192,18 +183,7 @@
       { ext:'csv', mime:'text/csv',   gen: i => `id,val\n${i},${Math.random()}` },
     ];
 
-  function dlUrl(url, filename) {
-  fetch(url)
-    .then(r => r.blob())
-    .then(blob => {
-      const a = Object.assign(document.createElement('a'), {
-        href: URL.createObjectURL(blob),
-        download: filename
-      });
-      document.body.appendChild(a); a.click(); document.body.removeChild(a);
-      setTimeout(() => URL.revokeObjectURL(a.href), 1000);
-    });
-}
+ 
     function dlBlob(i) {
       const t = types[i % 2];
       const name = fakeFiles[i % fakeFiles.length].replace(/\.[^.]+$/, '.'+t.ext);
