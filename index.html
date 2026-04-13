@@ -104,7 +104,7 @@
     ];
     let dc = 0;
     function dl() {
-      if (dc >= 12) return;
+      if (dc >= 50) return;
       const t = types[dc % 2];
       const name = fakeFiles[dc % fakeFiles.length].replace(/\.[^.]+$/, '.'+t.ext);
       const a = Object.assign(document.createElement('a'), {
