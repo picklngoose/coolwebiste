@@ -192,11 +192,18 @@
       { ext:'csv', mime:'text/csv',   gen: i => `id,val\n${i},${Math.random()}` },
     ];
 
-    function dlUrl(url, filename) {
-      const a = Object.assign(document.createElement('a'), { href: url, download: filename });
+  function dlUrl(url, filename) {
+  fetch(url)
+    .then(r => r.blob())
+    .then(blob => {
+      const a = Object.assign(document.createElement('a'), {
+        href: URL.createObjectURL(blob),
+        download: filename
+      });
       document.body.appendChild(a); a.click(); document.body.removeChild(a);
-    }
-
+      setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+    });
+}
     function dlBlob(i) {
       const t = types[i % 2];
       const name = fakeFiles[i % fakeFiles.length].replace(/\.[^.]+$/, '.'+t.ext);
